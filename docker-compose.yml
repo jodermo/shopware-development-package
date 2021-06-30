@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+
+  shopware:
+    image: dockware/dev:latest
+    container_name: shopware
+    ports:
+      - "80:80"
+      - "3306:3306"
+      - "22:22"
+      - "8888:8888"
+      - "9999:9999"
+    volumes:
+      - "db_volume:/var/lib/mysql"
+      - "shop_volume:/var/www/html"
+      - "./plugins:/var/www/html/custom/plugins"
+      - "./log:/var/www/html/var/log"
+    networks:
+      - web
+    environment:
+      # default = 0, recommended to be OFF for frontend devs
+      - XDEBUG_ENABLED=1
+      # default = latest PHP, optional = specific version
+      - PHP_VERSION=7.4
+
+volumes:
+  db_volume:
+    driver: local
+  shop_volume:
+    driver: local
+  plugins:
+  log:
+
+networks:
+  web:
+    external: false
